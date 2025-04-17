@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 import '/flutter_flow/flutter_flow_util.dart';
@@ -96,6 +97,11 @@ class LoginCall {
       castToType<String>(getJsonField(
         response,
         r'''$.Error''',
+      ));
+  static String? refreshToken(dynamic response) =>
+      castToType<String>(getJsonField(
+        response,
+        r'''$.refresh_token''',
       ));
 }
 

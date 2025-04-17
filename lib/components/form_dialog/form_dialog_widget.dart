@@ -1294,8 +1294,14 @@ class _FormDialogWidgetState extends State<FormDialogWidget> {
                         ],
                       ),
                       FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          if (_model.formKey.currentState == null ||
+                              !_model.formKey.currentState!.validate()) {
+                            return;
+                          }
+                          if (_model.dropDownValue == null) {
+                            return;
+                          }
                         },
                         text: 'Submit Form',
                         options: FFButtonOptions(

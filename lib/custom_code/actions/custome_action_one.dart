@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -26,83 +27,82 @@ Future customeActionOne(
   final baseUrl =
       'https://aidbox.shoprideon.com/fhir'; // Update with your Aidbox base Url
 
-  // String? patientId;
-  // final patient = Patient(
-  //   name: [
-  //     HumanName(
-  //       family: patientName.split(' ')[1],
-  //       given: [patientName.split(' ')[0]],
-  //     ),
-  //   ],
-  //   birthDate: Date(DateTime.parse(dob)),
-  //   gender: Code(gender.toLowerCase()), // 'male' or 'female'
-  //   address: patientAddress != null
-  //       ? [
-  //           Address(
-  //             text: patientAddress,
-  //           ),
-  //         ]
-  //       : null,
-  // );
-  // try {
-  //   Response patientResponse = await dio.post(
-  //     '$baseUrl/Patient',
-  //     data: patient.toJson(),
-  //     options: Options(headers: {
-  //       'Content-Type': 'application/fhir+json',
-  //       'Authorization': 'Bearer $bearerToken',
-  //     }),
-  //   );
-  //   print('ServiceRequest sent successfully: ${patientResponse.data}');
-  //   patientId = patientResponse.data['id'];
-  // } catch (e) {
-  //   print('Error sending ServiceRequest: $e');
-  // }
+  String? patientId;
 
-  // if (patientId == null) {
-  //   throw Exception('Patient ID not found in response.');
-  // }
+  // Safely split the patient name
+  List<String> nameParts = patientName.split(' ');
+  String firstName = nameParts.isNotEmpty ? nameParts[0] : '';
+  String lastName = nameParts.length > 1 ? nameParts[1] : '';
 
-  final serviceRequest = ServiceRequest(
-    resourceType: R4ResourceType.ServiceRequest,
-    // status: Code('draft'),
-    subject: Reference(
-      type: FhirUri('Patient'),
-      reference: 'Patient/1',
-    ),
-    // intent: Code('order'),
-    basedOn: [],
-    extension_: <FhirExtension>[
-      // Extension for blood pressure.
-      FhirExtension(
-        url: FhirUri('blood-pressure'),
-        valueString: bloodPressure,
-      ),
-      // Extension for height.
-      FhirExtension(
-        url: FhirUri('height'),
-        valueString: height,
-      ),
-      // Extension for weight.
-      FhirExtension(
-        url: FhirUri('weight'),
-        valueString: weight,
-      ),
-      // Extension for insurance-provider.
-      FhirExtension(
-        url: FhirUri('insurance-provider'),
-        valueString: insuranceProvider,
-      ),
-      // Extension for policy-number.
-      FhirExtension(
-        url: FhirUri('policy-number'),
-        valueString: policyNumber,
+  // Create patient with proper error handling
+  final patient = Patient(
+    name: [
+      HumanName(
+        family: lastName,
+        given: [firstName],
       ),
     ],
+    birthDate: FhirDate(DateTime.parse(dob)),
+    gender: FhirCode(gender.toLowerCase()),
+    address: patientAddress.isNotEmpty
+        ? [
+            Address(
+              text: patientAddress,
+            ),
+          ]
+        : null,
   );
 
   try {
-    final response = await dio.post(
+    Response patientResponse = await dio.post(
+      '$baseUrl/Patient',
+      data: patient.toJson(),
+      options: Options(headers: {
+        'Content-Type': 'application/fhir+json',
+        'Authorization': 'Bearer $bearerToken',
+      }),
+    );
+    print('Patient created successfully: ${patientResponse.data}');
+    patientId = patientResponse.data['id'];
+
+    if (patientId == null) {
+      throw Exception('Patient ID not found in response.');
+    }
+
+    // Create service request with required fields
+    final serviceRequest = ServiceRequest(
+      resourceType: R4ResourceType.ServiceRequest,
+      status: FhirCode('draft'), // Required field
+      intent: FhirCode('order'), // Required field
+      subject: Reference(
+        type: FhirUri('Patient'),
+        reference: 'Patient/$patientId', // Use the actual patient ID
+      ),
+      extension_: <FhirExtension>[
+        FhirExtension(
+          url: FhirUri('blood-pressure'),
+          valueString: bloodPressure,
+        ),
+        FhirExtension(
+          url: FhirUri('height'),
+          valueString: height,
+        ),
+        FhirExtension(
+          url: FhirUri('weight'),
+          valueString: weight,
+        ),
+        FhirExtension(
+          url: FhirUri('insurance-provider'),
+          valueString: insuranceProvider,
+        ),
+        FhirExtension(
+          url: FhirUri('policy-number'),
+          valueString: policyNumber,
+        ),
+      ],
+    );
+
+    final serviceResponse = await dio.post(
       '$baseUrl/ServiceRequest',
       data: serviceRequest.toJson(),
       options: Options(headers: {
@@ -110,8 +110,14 @@ Future customeActionOne(
         'Authorization': 'Bearer $bearerToken',
       }),
     );
-    print('ServiceRequest sent successfully: ${response.data}');
+    print('ServiceRequest sent successfully: ${serviceResponse.data}');
+    return serviceResponse.data['id']; // Return the service request ID
   } catch (e) {
-    print('Error sending ServiceRequest: $e');
+    print('Error in FHIR operation: $e');
+    if (e is DioException) {
+      print('Response data: ${e.response?.data}');
+      print('Response status: ${e.response?.statusCode}');
+    }
+    throw Exception('Failed to complete FHIR operation: $e');
   }
 }

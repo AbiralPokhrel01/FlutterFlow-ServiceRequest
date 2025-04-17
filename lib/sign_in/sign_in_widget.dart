@@ -39,6 +39,7 @@ class _SignInWidgetState extends State<SignInWidget>
       length: 1,
       initialIndex: 0,
     )..addListener(() => safeSetState(() {}));
+
     _model.emailAddressCreateTextController ??= TextEditingController();
     _model.emailAddressCreateFocusNode ??= FocusNode();
 
@@ -541,9 +542,12 @@ class _SignInWidgetState extends State<SignInWidget>
                                                             )!;
                                                             FFAppState()
                                                                     .RefreshToken =
-                                                                FFAppState()
-                                                                    .RefreshToken;
-                                                            safeSetState(() {});
+                                                                LoginCall
+                                                                    .refreshToken(
+                                                              (_model.apiResultei7
+                                                                      ?.jsonBody ??
+                                                                  ''),
+                                                            )!;
                                                             if ((_model.apiResultei7
                                                                         ?.statusCode ??
                                                                     200) >=
@@ -556,14 +560,8 @@ class _SignInWidgetState extends State<SignInWidget>
                                                               safeSetState(
                                                                   () {});
                                                             } else {
-                                                              FFAppState()
-                                                                      .passwordError =
-                                                                  'Success';
-                                                              safeSetState(
-                                                                  () {});
-
                                                               context.goNamed(
-                                                                  HomeTaskListWidget
+                                                                  DashboardPageWidget
                                                                       .routeName);
                                                             }
 

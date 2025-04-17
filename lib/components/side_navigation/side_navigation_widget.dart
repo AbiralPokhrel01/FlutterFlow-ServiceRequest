@@ -111,55 +111,33 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(
-                          Icons.dashboard_outlined,
-                          color: FlutterFlowTheme.of(context).info,
-                          size: 24.0,
-                        ),
-                        Text(
-                          'Dashboard',
-                          style:
-                              FlutterFlowTheme.of(context).bodyLarge.override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ].divide(SizedBox(width: 12.0)),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            Icons.dashboard_outlined,
+                            color: widget.pages == 'DashboardPage'
+                                ? FlutterFlowTheme.of(context).primary
+                                : FlutterFlowTheme.of(context).info,
+                            size: 24.0,
+                          ),
+                          Text(
+                            'Dashboard',
+                            style:
+                                FlutterFlowTheme.of(context).bodyLarge.override(
+                                      fontFamily: 'Inter',
+                                      color: widget.pages == 'DashboardPage'
+                                          ? FlutterFlowTheme.of(context).primary
+                                          : FlutterFlowTheme.of(context).info,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                          ),
+                        ].divide(SizedBox(width: 12.0)),
+                      ),
                     ),
-                  ),
-                ),
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: widget.pages == 'chats'
-                      ? FlutterFlowTheme.of(context).info
-                      : FlutterFlowTheme.of(context).primary,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        Icons.wechat_outlined,
-                        color: FlutterFlowTheme.of(context).info,
-                        size: 24.0,
-                      ),
-                      Text(
-                        'Chats',
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).info,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ].divide(SizedBox(width: 12.0)),
                   ),
                 ),
                 InkWell(
@@ -195,7 +173,9 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                         children: [
                           Icon(
                             Icons.calendar_today_outlined,
-                            color: FlutterFlowTheme.of(context).info,
+                            color: widget.pages == 'home_task_list'
+                                ? FlutterFlowTheme.of(context).primary
+                                : FlutterFlowTheme.of(context).info,
                             size: 24.0,
                           ),
                           Text(
@@ -203,7 +183,9 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                             style:
                                 FlutterFlowTheme.of(context).bodyLarge.override(
                                       fontFamily: 'Inter',
-                                      color: FlutterFlowTheme.of(context).info,
+                                      color: widget.pages == 'home_task_list'
+                                          ? FlutterFlowTheme.of(context).primary
+                                          : FlutterFlowTheme.of(context).info,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -219,16 +201,7 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    context.goNamed(
-                      ServiceRequestPageCopyWidget.routeName,
-                      extra: <String, dynamic>{
-                        kTransitionInfoKey: TransitionInfo(
-                          hasTransition: true,
-                          transitionType: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 0),
-                        ),
-                      },
-                    );
+                    context.goNamed(ServiceRequestPageCopyWidget.routeName);
                   },
                   child: Card(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -239,107 +212,35 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(
-                          Icons.description_outlined,
-                          color: FlutterFlowTheme.of(context).info,
-                          size: 24.0,
-                        ),
-                        Text(
-                          'Service Request',
-                          style:
-                              FlutterFlowTheme.of(context).bodyLarge.override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ].divide(SizedBox(width: 12.0)),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            Icons.description_outlined,
+                            color: widget.pages == 'ServiceRequestPageCopy'
+                                ? FlutterFlowTheme.of(context).primary
+                                : FlutterFlowTheme.of(context).info,
+                            size: 24.0,
+                          ),
+                          Text(
+                            'Service Request',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyLarge
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color:
+                                      widget.pages == 'ServiceRequestPageCopy'
+                                          ? FlutterFlowTheme.of(context).primary
+                                          : FlutterFlowTheme.of(context).info,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ].divide(SizedBox(width: 12.0)),
+                      ),
                     ),
-                  ),
-                ),
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: FlutterFlowTheme.of(context).primary,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        Icons.share_outlined,
-                        color: FlutterFlowTheme.of(context).alternate,
-                        size: 24.0,
-                      ),
-                      Text(
-                        'Referrals',
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).alternate,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ].divide(SizedBox(width: 12.0)),
-                  ),
-                ),
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: FlutterFlowTheme.of(context).primary,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        Icons.payments_outlined,
-                        color: FlutterFlowTheme.of(context).info,
-                        size: 24.0,
-                      ),
-                      Text(
-                        'Billing',
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).info,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ].divide(SizedBox(width: 12.0)),
-                  ),
-                ),
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  color: FlutterFlowTheme.of(context).primary,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        Icons.settings_outlined,
-                        color: FlutterFlowTheme.of(context).info,
-                        size: 24.0,
-                      ),
-                      Text(
-                        'Settings',
-                        style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).info,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ].divide(SizedBox(width: 12.0)),
                   ),
                 ),
               ].divide(SizedBox(height: 20.0)),
@@ -363,7 +264,10 @@ class _SideNavigationWidgetState extends State<SideNavigationWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(SignInWidget.routeName);
+                        FFAppState().BearerToken = '';
+                        safeSetState(() {});
+
+                        context.goNamed(SignInWidget.routeName);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,

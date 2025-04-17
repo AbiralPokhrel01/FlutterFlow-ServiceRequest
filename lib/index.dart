@@ -16,3 +16,4 @@ export '/task_detail_page/accepted_status/accepted_status_widget.dart'
     show AcceptedStatusWidget;
 export '/task_detail_page/in_progress_status/in_progress_status_widget.dart'
     show InProgressStatusWidget;
+export '/splash_screen/splash_screen_widget.dart' show SplashScreenWidget;
